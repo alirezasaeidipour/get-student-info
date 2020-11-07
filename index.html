@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ثبت اطلاعات و توانایی های دانشجویی</title>
+    <!--
+        Designed and developed by Mr.Alireza Saeidipour
+    -->
+    <style>
+        *{ padding: 0; margin: 0; box-sizing: border-box; }
+        @font-face { font-family: 'IRANSansWeb'; src: url('IRANSansWeb.ttf'); }
+        body { background: #f5f5f5; font-family: 'IRANSansWeb', sans-serif; direction: rtl; color: black; font-size: 16px; cursor: default; user-select: none; }
+        input { font-family: 'IRANSansWeb', sans-serif; }
+        select { font-family: 'IRANSansWeb', sans-serif; }
+        select option { font-family: 'IRANSansWeb', sans-serif; }
+        .page0 { width: 100%; height: 100%; display: block; position: fixed; padding: 5%; text-align: center; overflow-y: scroll }
+        .page0 div:nth-child(1) { width: 90%; margin: 0 auto 0 auto; text-align: center; display: block; }
+        .page0 div:nth-child(1) span:nth-child(1) { font-size: 48px; font-weight: bold; display: block; }
+        .page0 div:nth-child(1) span:nth-child(2) { font-size: 24px; display: block; margin-top: 10px; }
+        .page0 div:nth-child(2) { width: 90%; margin: 5% auto 0 auto; text-align: center; display: block; }
+        .page0 div:nth-child(2) .item { width: 90%; margin: 15px auto 15px auto; display: block; height: auto; }
+        .page0 div:nth-child(2) .item span { font-size: 24px; font-weight: bold; display: inline-block; margin: 10px; }
+        .page0 div:nth-child(2) .item input { width: auto; height: 40px;
+            min-width: 140px;
+            background: transparent; display: inline-block;
+            text-align: center; font-weight: bold; font-size: 24px;
+            border: 0;
+            border-bottom: 2px rgba(25, 25, 25, .4) dotted;
+        }
+        .page0 div:nth-child(2) .item select { width: auto; height: 40px;
+            min-width: 140px;
+            background: transparent; display: inline-block;
+            text-align: center; font-weight: bold; font-size: 16px;
+            border: 2px blueviolet solid;
+            border-radius: 15px;
+            padding: 0 15px 0 15px;
+        }
+        .page0 div:nth-child(2) .item input:hover, input:active, input:focus { border: 0; border-bottom: 2px rgba(25, 25, 25, .8) dotted; }
+        .page0 div:nth-child(2) .btn { width: auto; height: 75px; background: blueviolet; color: white; font-size: 20px; font-weight: bold;
+            display: block; margin: 35px auto 35px auto; text-align: center; max-width: 320px; padding-top: 22px; border-radius: 10px; }
+        .page0 div:nth-child(2) .btn:hover { opacity: .7; }
+        .container {
+            display: block;
+            position: relative;
+            padding-right: 35px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            font-size: 22px;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            max-width: 300px;
+        }
+        .container span:nth-child(1) { font-size: 18px !important; font-weight: bold; }
+        .container input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+        .checkmark {
+            position: absolute;
+            top: 7px;
+            right: 0;
+            height: 25px;
+            width: 25px;
+            background-color: rgba(25,25,25,.3);
+            border-radius: 50%;
+        }
+        .container:hover input ~ .checkmark {
+            background-color: #ccc;
+        }
+        .container input:checked ~ .checkmark { background-color: blueviolet; }
+        .checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+        }
+        .container input:checked ~ .checkmark:after {
+            display: block;
+        }
+        .container .checkmark:after {
+            top: 9px;
+            left: 9px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: white;
+        }
+    </style>
+</head>
+<body>
+<div class="page0">
+    <div style="opacity: 0">
+        <span></span>
+        <span></span>
+    </div>
+    <div style="display: none; opacity: 0">
+        <div class="item"><span>نام من</span><input id="first_name" /><span>است</span></div>
+        <div class="item"><span>نام خانوادگی من</span><input id="last_name" /><span>است</span></div>
+        <div class="item"><span>شماره دانشجویی من</span><input id="stuid" /><span>است</span></div>
+        <div class="item"><span>شماره تلفن همراه من</span><input id="cellphone_num" /><span>است</span></div>
+        <div class="item" style="color: blueviolet"><span>آدر س گیت هاب من</span><input id="github_addr" /><span>است (غیر اجباری)</span></div>
+        <div class="item" style="color: blueviolet"><span>آدرس رزومه من</span><input id="cv_addr" /><span>است (غیر اجباری)</span></div>
+        <div class="item" style="color: blueviolet"><span>آدرس انگیزه نامه من</span><input id="sop_addr" /><span>است (غیر اجباری)</span></div>
+        <div class="item" style="margin-top: 25px;">
+            <span style="display: block;">مقطع تحصیلی من</span>
+            <select id="uni_level">
+                <option value="0">کارشناسی</option>
+                <option value="1">کارشناسی ارشد</option>
+            </select>
+        </div>
+        <div class="item" style="margin-top: 25px;">
+            <span style="display: block;">شغل من</span>
+            <select id="my_job">
+                <option value="0">دانشجوی تمام وقت</option>
+                <option value="1">کارمند</option>
+                <option value="2">خانه دار</option>
+            </select>
+        </div>
+        <div class="item" style="margin-top: 25px;">
+            <span style="display: block;">میانگین وقت آزاد من در روز جهت پژوهش و کار مرتبط با دروس</span>
+            <select id="my_time">
+                <option value="0">کمتر از 1 ساعت</option>
+                <option value="0">1 ساعت در روز</option>
+                <option value="1">2 ساعت در روز</option>
+                <option value="2">3 ساعت در روز</option>
+                <option value="3">4 ساعت در روز</option>
+                <option value="4">بیشتر از 4 ساعت در روز</option>
+            </select>
+        </div>
+        <div class="item" style="margin-top: 25px;">
+            <span style="display: block;">درس / دروس انتخابی من در این ترم</span>
+            <center>
+                <label class="container"><span>سمینار</span><input id="course_1" type="checkbox"><span class="checkmark"></span></label>
+                <label class="container"><span>سمینار تحقیق و تتبع</span><input id="course_2" type="checkbox"><span class="checkmark"></span></label>
+                <label class="container"><span>مهندسی نرم افزار پیشرفته</span><input id="course_3" type="checkbox"><span class="checkmark"></span></label>
+                <label class="container"><span>معماری نرم افزار</span><input id="course_4" type="checkbox"><span class="checkmark"></span></label>
+                <label class="container"><span>الگوریتم پیشرفته</span><input id="course_5" type="checkbox"><span class="checkmark"></span></label>
+                <label class="container"><span>مدیریت پروژه های نرم افزاری</span><input id="course_6" type="checkbox"><span class="checkmark"></span></label>
+                <label class="container"><span>متدولوژی ایجاد نرم افزار</span><input id="course_7" type="checkbox"><span class="checkmark"></span></label>
+                <label class="container"><span>شیوه ارائه مطالب علمی و فنی</span><input id="course_8" type="checkbox"><span class="checkmark"></span></label>
+                <label class="container"><span>نظریه زبان ها و ماشین ها</span><input id="course_9" type="checkbox"><span class="checkmark"></span></label>
+                <label class="container"><span>روش پژوهش و ارائه</span><input id="course_10" type="checkbox"><span class="checkmark"></span></label>
+                <label class="container"><span>برنامه نویسی وب</span><input id="course_11" type="checkbox"><span class="checkmark"></span></label>
+                <label class="container"><span>تعامل انسان و کامپیوتر</span><input id="course_12" type="checkbox"><span class="checkmark"></span></label>
+                <label class="container"><span>طراحی واسط کاربر</span><input id="course_13" type="checkbox"><span class="checkmark"></span></label>
+                <label class="container"><span>کارآموزی</span><input id="course_14" type="checkbox"><span class="checkmark"></span></label>
+                <label class="container"><span>پروژه</span><input id="course_15" type="checkbox"><span class="checkmark"></span></label>
+                <label class="container"><span>پروژه فناوری اطلاعات</span><input id="course_16" type="checkbox"><span class="checkmark"></span></label>
+                <label class="container"><span>پروژه پایانی</span><input id="course_17" type="checkbox"><span class="checkmark"></span></label>
+            </center>
+        </div>
+        <div class="item" style="margin-top: 35px;">
+            <span style="display: block;">میزان دسترسی من به امکانات</span>
+            <select id="computer_status">
+                <option value="0">به کامپیوتر دسترسی دارم و مشکلی از نظر امکانات ندارم</option>
+                <option value="1">متاسفانه کامپیوتر ندارم ولی موبایل هوشمند دارم</option>
+                <option value="2">متاسفانه کامپیوتر ندارم و موبایل هوشمند هم ندارم</option>
+            </select>
+        </div>
+        <div class="item" style="margin-top: 35px;">
+            <span style="display: block;">میزان آشنایی و توانایی من در تایپ و لاتکس</span>
+            <select id="skill_type">
+                <option value="0">آشنایی و توانایی انجام این کار را ندارم</option>
+                <option value="1">آشنایی و توانایی این کار را دارم و تمایل به همکاری دارم</option>
+                <option value="2">آشنایی و توانایی این کار را دارم ولی تمایلی به همکاری در این زمینه ندارم</option>
+            </select>
+        </div>
+        <div class="item" style="margin-top: 35px;">
+            <span style="display: block;">میزبان آشنایی با ترجمه متون انگلیسی</span>
+            <select id="skill_translate">
+                <option value="0">تسلط کافی ندارم</option>
+                <option value="1">تسلط کافی دارم و در حد متوسط میتوانم ترجمه کنم</option>
+                <option value="2">تسلط کافی دارم و در حد متوسط میتوانم ترجمه کنم ولی تمایل به انجام این کار را ندارم</option>
+                <option value="3">تسلط کافی دارم و در حد خوب میتوانم ترجمه کنم</option>
+                <option value="4">تسلط کافی دارم و در حد خوب میتوانم ترجمه کنم ولی تمایل به انجام این کار را ندارم</option>
+                <option value="5">تسلط کافی دارم و در حد عالی میتوانم ترجمه کنم</option>
+                <option value="6">تسلط کافی دارم و در حد عالی میتوانم ترجمه کنم ولی تمایل به انجام این کار را ندارم</option>
+            </select>
+        </div>
+        <div class="item" style="margin-top: 35px;">
+            <span style="display: block;">آشنایی با مسائل طراحی گرافیکی قالب سایت (کار با فتوشاپ)</span>
+            <select id="skill_theme_design">
+                <option value="0">آشنایی ندارم</option>
+                <option value="1">آشنایی در حد متوسط دارم</option>
+                <option value="2">آشنایی در حد متوسط دارم ولی تمایل به انجام این کار را ندارم</option>
+                <option value="3">آشنایی در حد خوب دارم</option>
+                <option value="4">آشنایی در حد خوب دارم ولی تمایل به انجام این کار را ندارم</option>
+                <option value="5">آشنایی در حد عالی و حرفه ای دارم</option>
+                <option value="6">آشنایی در حد عالی و حرفه ای دارم ولی تمایل به انجام این کار را ندارم</option>
+            </select>
+        </div>
+        <div class="item" style="margin-top: 35px;">
+            <span style="display: block;">آشنایی با پایگاه داده و طراحی پایگاه داده در MySQL</span>
+            <select id="skill_mysql">
+                <option value="0">آشنایی ندارم</option>
+                <option value="1">آشنایی و توانایی در حد متوسط دارم</option>
+                <option value="2">آشنایی و توانایی در حد متوسط دارم ولی تمایل به انجام این کار را ندارم</option>
+                <option value="3">آشنایی و توانایی در حد خوب دارم</option>
+                <option value="4">آشنایی و توانایی در حد خوب دارم ولی تمایل به انجام این کار را ندارم</option>
+                <option value="5">آشنایی و توانایی در حد عالی و حرفه ای دارم</option>
+                <option value="6">آشنایی و توانایی در حد عالی و حرفه ای دارم ولی تمایل به انجام این کار را ندارم</option>
+            </select>
+        </div>
+        <div class="item" style="margin-top: 35px;">
+            <span style="display: block;">آشنایی با زبان برنامه نویسی HTML/CSS و قالب سازی</span>
+            <select id="skill_html_css">
+                <option value="0">آشنایی ندارم ولی تمایل به یادگیری دارم</option>
+                <option value="1">آشنایی ندارم و تمایلی به یادگیری نیز ندارم</option>
+                <option value="2">آشنایی دارم ولی در حد متوسط ولی تمایلی به ادامه و یادگیری بیشتر ندارم</option>
+                <option value="3">آشنایی دارم ولی در حد متوسط و البته تمایل دارم که بیشتر یاد بگیرم</option>
+                <option value="4">آشنایی دارم و تا این لحظه قالب طراحی کرده ام ولی حرفه ای نیستم و نمیخواهم ادامه دهم</option>
+                <option value="5">آشنایی دارم و تا این لحظه قالب طراحی کرده ام ولی حرفه ای نیستم اما تمایل دارم حرفه ای شوم</option>
+                <option value="6">آشنایی دارم و به صورت حرفه ای قالب طراحی کرده ام ولی تمایلی به آموزش به دیگران ندارم</option>
+                <option value="7">آشنایی دارم و به صورت حرفه ای قالب طراحی کرده ام و تمایل دارم به دیگران نیز آموزش بدهم</option>
+            </select>
+        </div>
+        <div class="item" style="margin-top: 35px;">
+            <span style="display: block;">آشنایی با زبان برنامه نویسی JavaScript</span>
+            <select id="skill_js">
+                <option value="0">آشنایی ندارم و تمایلی به یادگیری ندارم</option>
+                <option value="1">آشنایی ندارم ولی تمایل دارم که یاد بگیرم و کار کنم</option>
+                <option value="2">آشنایی و توانایی دارم ولی در حد متوسط ولی تمایل به ادامه یادگیری بیشتر ندارم</option>
+                <option value="3">آشنایی و توانایی دارم ولی در حد متوسط و البته تمایل به یادگیری بیشتر دارم</option>
+                <option value="4">آشنایی دارم ولی در حد متوسط ولی تمایل به یادگیری بیشتر ندارم</option>
+                <option value="5">آشنایی دارم ولی در حد متوسط و تمایل به یادگیری بیشتر دارم</option>
+                <option value="6">آشنایی دارم در حد خوب و پروژه هایی انجام داده ام ولی تمایل به یادگیری بیشتر ندارم</option>
+                <option value="7">آشنایی دارم در حد خوب و پروژه هایی انجام داده ام و تمایل دارم بیشتر یادبگیرم و حرفه ای شوم</option>
+                <option value="8">آشنایی دارم و به صورت حرفه ای کار کرده ام ولی تمایل به آموزش آن به دیگران ندارم</option>
+                <option value="9">آشنایی دارم و به صورت حرفه ای کار کرده ام و تمایل دارم به دیگران نیز آموزش بدهم</option>
+            </select>
+        </div>
+        <div class="item" style="margin-top: 35px;">
+            <span style="display: block;">آشنایی با زبان برنامه نویسی PHP</span>
+            <select id="skill_php">
+                <option value="0">آشنایی ندارم و تمایلی به یادگیری ندارم</option>
+                <option value="1">آشنایی ندارم ولی تمایل دارم که یاد بگیرم و کار کنم</option>
+                <option value="2">آشنایی و توانایی دارم ولی در حد متوسط ولی تمایل به ادامه یادگیری بیشتر ندارم</option>
+                <option value="3">آشنایی و توانایی دارم ولی در حد متوسط و البته تمایل به یادگیری بیشتر دارم</option>
+                <option value="4">آشنایی دارم ولی در حد متوسط ولی تمایل به یادگیری بیشتر ندارم</option>
+                <option value="5">آشنایی دارم ولی در حد متوسط و تمایل به یادگیری بیشتر دارم</option>
+                <option value="6">آشنایی دارم در حد خوب و پروژه هایی انجام داده ام ولی تمایل به یادگیری بیشتر ندارم</option>
+                <option value="7">آشنایی دارم در حد خوب و پروژه هایی انجام داده ام و تمایل دارم بیشتر یادبگیرم و حرفه ای شوم</option>
+                <option value="8">آشنایی دارم و به صورت حرفه ای کار کرده ام ولی تمایل به آموزش آن به دیگران ندارم</option>
+                <option value="9">آشنایی دارم و به صورت حرفه ای کار کرده ام و تمایل دارم به دیگران نیز آموزش بدهم</option>
+            </select>
+        </div>
+        <div class="item" style="margin-top: 35px;">
+            <span style="display: block;">آشنایی با زبان برنامه نویسی #C</span>
+            <select id="skill_cs">
+                <option value="0">آشنایی ندارم و تمایلی به یادگیری ندارم</option>
+                <option value="1">آشنایی ندارم ولی تمایل دارم که یاد بگیرم و کار کنم</option>
+                <option value="2">آشنایی و توانایی دارم ولی در حد متوسط ولی تمایل به ادامه یادگیری بیشتر ندارم</option>
+                <option value="3">آشنایی و توانایی دارم ولی در حد متوسط و البته تمایل به یادگیری بیشتر دارم</option>
+                <option value="4">آشنایی دارم ولی در حد متوسط ولی تمایل به یادگیری بیشتر ندارم</option>
+                <option value="5">آشنایی دارم ولی در حد متوسط و تمایل به یادگیری بیشتر دارم</option>
+                <option value="6">آشنایی دارم در حد خوب و پروژه هایی انجام داده ام ولی تمایل به یادگیری بیشتر ندارم</option>
+                <option value="7">آشنایی دارم در حد خوب و پروژه هایی انجام داده ام و تمایل دارم بیشتر یادبگیرم و حرفه ای شوم</option>
+                <option value="8">آشنایی دارم و به صورت حرفه ای کار کرده ام ولی تمایل به آموزش آن به دیگران ندارم</option>
+                <option value="9">آشنایی دارم و به صورت حرفه ای کار کرده ام و تمایل دارم به دیگران نیز آموزش بدهم</option>
+            </select>
+        </div>
+        <div class="btn" onclick="sendToServer()">ثبت اطلاعات من</div>
+        <span style="margin-bottom: 25px">طراحی و توسعه، علیرضا سعیدی پور</span>
+    </div>
+</div>
+<script>
+    let hello_txt = 'سلام، ';
+    const hours = new Date().getHours();
+    if(hours >= 5 && hours < 11) hello_txt += 'صبح بخیر ... چطورین ؟';
+    else if(hours >= 11 && hours < 15) hello_txt += 'ظهر بخیر ... چطورین ؟';
+    else if(hours >= 15 && hours < 19) hello_txt += 'بعدازظهر بخیر ... چطورین ؟';
+    else hello_txt += 'شب بخیر. چطورین ؟';
+    const page0_head = document.body.children[0].children[0];
+    const page0_title = page0_head.children[0];
+    const page0_description = page0_head.children[1];
+    const page0_content = document.body.children[0].children[1];
+    page0_title.innerText = hello_txt;
+    function FadeIn(e, time, onDone) {
+        let opacity = 0;
+        e.style.display = "block";
+        let timer = setInterval(function () {
+            opacity += 50 / time;
+            if(opacity >= 1) {
+                clearInterval(timer);
+                opacity = 1;
+                onDone();
+            }
+            e.style.opacity = opacity;
+            e.style.filter = 'alpha(opacity=' + opacity * 100 + ')';
+        }, 50);
+    }
+    function FadeOut(e, time, onDone) {
+        let opacity = 1;
+        let timer = setInterval(function () {
+            opacity -= 50 / time;
+            if(opacity <= 0) {
+                clearInterval(timer);
+                opacity = 0;
+                e.style.display = "none";
+                onDone();
+            }
+            e.style.opacity = opacity;
+            e.style.filter = 'alpha(opacity=' + opacity * 100 + ')';
+        }, 50);
+    }
+    function isNumeric(value) {
+        return /^-?\d+$/.test(value);
+    }
+    function isURL(str) {
+        let pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+            '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.?)+[a-z]{2,}|'+ // domain name
+            '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+            '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+            '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+            '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+        return pattern.test(str);
+    }
+    async function sendToServer() {
+        let char = new RegExp("[\u0600-\u06FF]");
+
+        let first_name = document.getElementById('first_name').value;
+        if(first_name == null || first_name.length === 0) { alert('لطفا نام خودتون رو وارد کنید'); return; }
+        else if(first_name.length > 16 || first_name.length < 3 || !char.test(first_name)) {
+            alert('نام وارد شده نا معتبر است. لطفا نام صحیح خود را به صورت فارسی وارد کنید'); return; }
+
+        let last_name = document.getElementById('last_name').value;
+        if(last_name == null || last_name.length === 0) { alert('لطفا نام خانوادگی خودتون رو وارد کنید'); return; }
+        else if(last_name.length > 24 || last_name.length < 3 || !char.test(last_name)) {
+            alert('نام خانوادگی وارد شده نا معتبر است. لطفا نام صحیح خود را به صورت فارسی وارد کنید'); return; }
+
+        let stuid = document.getElementById('stuid').value;
+        if(stuid == null || stuid.length === 0) { alert('لطفا شماره دانشجویی خودتون رو وارد کنید'); return; }
+        else if(stuid.length !== 9 || !isNumeric(stuid) || stuid.charAt(0) !== '9') {
+            alert('شماره دانشجویی وارد شده نا معتبر است. لطفا شماره دانشجویی خود را به صورت صحیح وارد کنید'); return; }
+
+        let cellphone_num = document.getElementById('cellphone_num').value;
+        if(cellphone_num == null || cellphone_num.length === 0) { alert('لطفا شماره تلفن همراه خودتون رو وارد کنید'); return; }
+        else if((cellphone_num.length !== 11 && cellphone_num.length !== 10) || !isNumeric(cellphone_num)) {
+            alert('شماره تلفن همراه وارد شده نا معتبر است. لطفا شماره تلفن همراه خود را به صورت صحیح وارد کنید'); return; }
+        if((cellphone_num.length === 11 && (cellphone_num.charAt(0) !== '0' || cellphone_num.charAt(1) !== '9'))
+            || (cellphone_num.length === 10 && (cellphone_num.charAt(0) !== '9'))) {
+            alert('شماره تلفن همراه وارد شده نا معتبر است. لطفا شماره تلفن همراه خود را به صورت صحیح وارد کنید'); return;
+        }
+        if(cellphone_num.length === 11)
+            cellphone_num.substr(1);
+
+        let github_addr = document.getElementById('github_addr').value;
+        if(github_addr !== null && github_addr.length > 0) {
+            if(!isURL(github_addr) || github_addr.length > 256) {
+                alert('آدرس گیت هاب وارد شده نامعتبر است');
+                return;
+            }
+        }
+
+        let cv_addr = document.getElementById('cv_addr').value;
+        if(cv_addr !== null && cv_addr.length > 0) {
+            if(!isURL(cv_addr) || cv_addr.length > 256) {
+                alert('آدرس رزومه وارد شده نامعتبر است');
+                return;
+            }
+        }
+
+        let sop_addr = document.getElementById('sop_addr').value;
+        if(sop_addr !== null && sop_addr.length > 0) {
+            if(!isURL(sop_addr) || sop_addr.length > 256) {
+                alert('آدرس انگیزه نامه وارد شده نامعتبر است');
+                return;
+            }
+        }
+
+        let uni_level = document.getElementById('uni_level').value;
+        switch (uni_level) {
+            case '0':case '1':break;
+            default:
+                return;
+        }
+        let my_job = document.getElementById('my_job').value;
+        switch (my_job) {
+            case '0':case '1':case '2':break;
+            default:
+                return;
+        }
+        let my_time = document.getElementById('my_time').value;
+        switch (my_time) {
+            case '0':case '1':case '2':case '3':case '4':case '5':break;
+            default:
+                return;
+        }
+        let computer_status = document.getElementById('computer_status').value;
+        switch (computer_status) {
+            case '0':case '1':case '2':break;
+            default:
+                return;
+        }
+        let skill_type = document.getElementById('skill_type').value;
+        switch (skill_type) {
+            case '0':case '1':case '2':break;
+            default:
+                return;
+        }
+        let skill_translate = document.getElementById('skill_translate').value;
+        switch (skill_translate) {
+            case '0':case '1':case '2':case '3':case '4':case '5':case '6':break;
+            default:
+                return;
+        }
+        let skill_theme_design = document.getElementById('skill_theme_design').value;
+        switch (skill_theme_design) {
+            case '0':case '1':case '2':case '3':case '4':case '5':case '6':break;
+            default:
+                return;
+        }
+        let skill_mysql = document.getElementById('skill_mysql').value;
+        switch (skill_mysql) {
+            case '0':case '1':case '2':case '3':case '4':case '5':case '6':break;
+            default:
+                return;
+        }
+        let skill_html_css = document.getElementById('skill_html_css').value;
+        switch (skill_html_css) {
+            case '0':case '1':case '2':case '3':case '4':case '5':case '6':case '7':break;
+            default:
+                return;
+        }
+        let skill_js = document.getElementById('skill_js').value;
+        switch (skill_js) {
+            case '0':case '1':case '2':case '3':case '4':case '5':case '6':case '7':case '8':case '9':break;
+            default:
+                return;
+        }
+        let skill_php = document.getElementById('skill_php').value;
+        switch (skill_php) {
+            case '0':case '1':case '2':case '3':case '4':case '5':case '6':case '7':case '8':case '9':break;
+            default:
+                return;
+        }
+        let skill_cs = document.getElementById('skill_cs').value;
+        switch (skill_cs) {
+            case '0':case '1':case '2':case '3':case '4':case '5':case '6':case '7':case '8':case '9':break;
+            default:
+                return;
+        }
+
+        let course_1 = document.getElementById('course_1').checked;
+        let course_2 = document.getElementById('course_2').checked;
+        let course_3 = document.getElementById('course_3').checked;
+        let course_4 = document.getElementById('course_4').checked;
+        let course_5 = document.getElementById('course_5').checked;
+        let course_6 = document.getElementById('course_6').checked;
+        let course_7 = document.getElementById('course_7').checked;
+        let course_8 = document.getElementById('course_8').checked;
+        let course_9 = document.getElementById('course_9').checked;
+        let course_10 = document.getElementById('course_10').checked;
+        let course_11 = document.getElementById('course_11').checked;
+        let course_12 = document.getElementById('course_12').checked;
+        let course_13 = document.getElementById('course_13').checked;
+        let course_14 = document.getElementById('course_14').checked;
+        let course_15 = document.getElementById('course_15').checked;
+        let course_16 = document.getElementById('course_16').checked;
+        let course_17 = document.getElementById('course_17').checked;
+        if(!course_1 && !course_2 && !course_3 && !course_4 && !course_5 && !course_6 && !course_7 && !course_8 && !course_9 && !course_10 && !course_11 && !course_12
+            && !course_13 && !course_14 && !course_15 && !course_16 && !course_17) {
+            alert('لطفا درس / دروس انتخابی خود در این ترم را مشخص کنید');
+            return;
+        }
+
+        const data = {
+            'first_name': first_name,
+            'last_name': last_name,
+            'stuid': stuid,
+            'cellphone_num': cellphone_num,
+            'github_addr': (github_addr === null ? '' : github_addr),
+            'cv_addr': (cv_addr === null ? '' : cv_addr),
+            'sop_addr': (sop_addr === null ? '' : sop_addr),
+            'uni_level': uni_level,
+            'my_job': my_job,
+            'my_time': my_time,
+            'computer_status': computer_status,
+            'skill_type': skill_type,
+            'skill_translate': skill_translate,
+            'skill_theme_design': skill_theme_design,
+            'skill_mysql': skill_mysql,
+            'skill_html_css': skill_html_css,
+            'skill_js': skill_js,
+            'skill_php': skill_php,
+            'skill_cs': skill_cs,
+            'course_1': (course_1 === true ? '1' : '0'),
+            'course_2': (course_2 === true ? '1' : '0'),
+            'course_3': (course_3 === true ? '1' : '0'),
+            'course_4': (course_4 === true ? '1' : '0'),
+            'course_5': (course_5 === true ? '1' : '0'),
+            'course_6': (course_6 === true ? '1' : '0'),
+            'course_7': (course_7 === true ? '1' : '0'),
+            'course_8': (course_8 === true ? '1' : '0'),
+            'course_9': (course_9 === true ? '1' : '0'),
+            'course_10': (course_10 === true ? '1' : '0'),
+            'course_11': (course_11 === true ? '1' : '0'),
+            'course_12': (course_12 === true ? '1' : '0'),
+            'course_13': (course_13 === true ? '1' : '0'),
+            'course_14': (course_14 === true ? '1' : '0'),
+            'course_15': (course_15 === true ? '1' : '0'),
+            'course_16': (course_16 === true ? '1' : '0'),
+            'course_17': (course_17 === true ? '1' : '0')
+        };
+        await fetch('', {
+            body: data,
+            headers: { 'content-type': 'application/json; charset=UTF-8' },
+            method: 'POST'
+        }).then(response => {
+            alert("اتصال به سرور با خطا مواجه شد");
+
+        }).then(result_data => {
+
+        }).catch(error => {
+            alert("اتصال به سرور با خطا مواجه شد")
+        });
+    }
+    // display hello message
+    FadeIn(page0_head, 2000, function () {
+        FadeOut(page0_head, 1500, function () {
+            // hello gone
+            // display welcome message
+            page0_title.innerText = 'به سیستم ثبت اطلاعات و توانایی های دانشجویی خوش آمدین';
+            FadeIn(page0_head, 2500, function () {
+                FadeOut(page0_head, 1500, function () {
+                    // welcome message gone
+                    // display 'enter information' message
+                    page0_title.innerText = 'لطفا اطلاعات خودتون رو وارد کنین';
+                    page0_description.innerText = 'فقط لطفا اطلاعات خودتون رو حتما به صورت فارسی وارد کنید';
+                    FadeIn(page0_head, 1000, function () {
+                        FadeIn(page0_content, 1000, function () {});
+                    });
+                });
+            });
+        });
+    });
+</script>
+</body>
+</html>
