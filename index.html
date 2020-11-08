@@ -17,7 +17,7 @@
         .page0 div:nth-child(1) { width: 90%; margin: 0 auto 0 auto; text-align: center; display: block; }
         .page0 div:nth-child(1) span:nth-child(1) { font-size: 48px; font-weight: bold; display: block; }
         .page0 div:nth-child(1) span:nth-child(2) { font-size: 24px; display: block; margin-top: 10px; }
-        .page0 div:nth-child(2) { width: 90%; margin: 5% auto 0 auto; text-align: center; display: block; }
+        .page0 div:nth-child(2) { width: 90%; margin: 50px auto 0 auto; text-align: center; display: block; }
         .page0 div:nth-child(2) .item { width: 90%; margin: 15px auto 15px auto; display: block; height: auto; }
         .page0 div:nth-child(2) .item span { font-size: 24px; font-weight: bold; display: inline-block; margin: 10px; }
         .page0 div:nth-child(2) .item input { width: auto; height: 40px;
@@ -102,7 +102,7 @@
         <div class="item"><span>نام خانوادگی من</span><input id="last_name" /><span>است</span></div>
         <div class="item"><span>شماره دانشجویی من</span><input id="stuid" /><span>است</span></div>
         <div class="item"><span>شماره تلفن همراه من</span><input id="cellphone_num" /><span>است</span></div>
-        <div class="item" style="color: blueviolet"><span>آدر س گیت هاب من</span><input id="github_addr" /><span>است (غیر اجباری)</span></div>
+        <div class="item" style="color: blueviolet"><span>آدرس گیت هاب من</span><input id="github_addr" /><span>است (غیر اجباری)</span></div>
         <div class="item" style="color: blueviolet"><span>آدرس رزومه من</span><input id="cv_addr" /><span>است (غیر اجباری)</span></div>
         <div class="item" style="color: blueviolet"><span>آدرس انگیزه نامه من</span><input id="sop_addr" /><span>است (غیر اجباری)</span></div>
         <div class="item" style="margin-top: 25px;">
@@ -124,11 +124,11 @@
             <span style="display: block;">میانگین وقت آزاد من در روز جهت پژوهش و کار مرتبط با دروس</span>
             <select id="my_time">
                 <option value="0">کمتر از 1 ساعت</option>
-                <option value="0">1 ساعت در روز</option>
-                <option value="1">2 ساعت در روز</option>
-                <option value="2">3 ساعت در روز</option>
-                <option value="3">4 ساعت در روز</option>
-                <option value="4">بیشتر از 4 ساعت در روز</option>
+                <option value="1">1 ساعت در روز</option>
+                <option value="2">2 ساعت در روز</option>
+                <option value="3">3 ساعت در روز</option>
+                <option value="4">4 ساعت در روز</option>
+                <option value="5">بیشتر از 4 ساعت در روز</option>
             </select>
         </div>
         <div class="item" style="margin-top: 25px;">
@@ -320,33 +320,34 @@
         return pattern.test(str);
     }
     async function sendToServer() {
+        let send_data = {};
         let char = new RegExp("[\u0600-\u06FF]");
 
-        let first_name = document.getElementById('first_name').value;
-        if(first_name == null || first_name.length === 0) { alert('لطفا نام خودتون رو وارد کنید'); return; }
-        else if(first_name.length > 16 || first_name.length < 3 || !char.test(first_name)) {
+        send_data['first_name'] = document.getElementById('first_name').value;
+        if(send_data['first_name'] == null || send_data['first_name'].length === 0) { alert('لطفا نام خودتون رو وارد کنید'); return; }
+        else if(send_data['first_name'].length > 16 || send_data['first_name'].length < 3 || !char.test(send_data['first_name'])) {
             alert('نام وارد شده نا معتبر است. لطفا نام صحیح خود را به صورت فارسی وارد کنید'); return; }
 
-        let last_name = document.getElementById('last_name').value;
-        if(last_name == null || last_name.length === 0) { alert('لطفا نام خانوادگی خودتون رو وارد کنید'); return; }
-        else if(last_name.length > 24 || last_name.length < 3 || !char.test(last_name)) {
+        send_data['last_name'] = document.getElementById('last_name').value;
+        if(send_data['last_name'] == null || send_data['last_name'].length === 0) { alert('لطفا نام خانوادگی خودتون رو وارد کنید'); return; }
+        else if(send_data['last_name'].length > 32 || send_data['last_name'].length < 3 || !char.test(send_data['last_name'])) {
             alert('نام خانوادگی وارد شده نا معتبر است. لطفا نام صحیح خود را به صورت فارسی وارد کنید'); return; }
 
-        let stuid = document.getElementById('stuid').value;
-        if(stuid == null || stuid.length === 0) { alert('لطفا شماره دانشجویی خودتون رو وارد کنید'); return; }
-        else if(stuid.length !== 9 || !isNumeric(stuid) || stuid.charAt(0) !== '9') {
+        send_data['stuid'] = document.getElementById('stuid').value;
+        if(send_data['stuid'] == null || send_data['stuid'].length === 0) { alert('لطفا شماره دانشجویی خودتون رو وارد کنید'); return; }
+        else if(send_data['stuid'].length !== 9 || !isNumeric(send_data['stuid']) || send_data['stuid'].charAt(0) !== '9') {
             alert('شماره دانشجویی وارد شده نا معتبر است. لطفا شماره دانشجویی خود را به صورت صحیح وارد کنید'); return; }
 
-        let cellphone_num = document.getElementById('cellphone_num').value;
-        if(cellphone_num == null || cellphone_num.length === 0) { alert('لطفا شماره تلفن همراه خودتون رو وارد کنید'); return; }
-        else if((cellphone_num.length !== 11 && cellphone_num.length !== 10) || !isNumeric(cellphone_num)) {
+        send_data['cellphone_num'] = document.getElementById('cellphone_num').value;
+        if(send_data['cellphone_num'] == null || send_data['cellphone_num'].length === 0) { alert('لطفا شماره تلفن همراه خودتون رو وارد کنید'); return; }
+        else if((send_data['cellphone_num'].length !== 11 && send_data['cellphone_num'].length !== 10) || !isNumeric(send_data['cellphone_num'])) {
             alert('شماره تلفن همراه وارد شده نا معتبر است. لطفا شماره تلفن همراه خود را به صورت صحیح وارد کنید'); return; }
-        if((cellphone_num.length === 11 && (cellphone_num.charAt(0) !== '0' || cellphone_num.charAt(1) !== '9'))
-            || (cellphone_num.length === 10 && (cellphone_num.charAt(0) !== '9'))) {
+        if((send_data['cellphone_num'].length === 11 && (send_data['cellphone_num'].charAt(0) !== '0' || send_data['cellphone_num'].charAt(1) !== '9'))
+            || (send_data['cellphone_num'].length === 10 && (send_data['cellphone_num'].charAt(0) !== '9'))) {
             alert('شماره تلفن همراه وارد شده نا معتبر است. لطفا شماره تلفن همراه خود را به صورت صحیح وارد کنید'); return;
         }
-        if(cellphone_num.length === 11)
-            cellphone_num.substr(1);
+        if(send_data['cellphone_num'].length === 11)
+            send_data['cellphone_num'] = send_data['cellphone_num'].substr(1);
 
         let github_addr = document.getElementById('github_addr').value;
         if(github_addr !== null && github_addr.length > 0) {
@@ -354,6 +355,7 @@
                 alert('آدرس گیت هاب وارد شده نامعتبر است');
                 return;
             }
+            send_data['github_addr'] = github_addr;
         }
 
         let cv_addr = document.getElementById('cv_addr').value;
@@ -362,6 +364,7 @@
                 alert('آدرس رزومه وارد شده نامعتبر است');
                 return;
             }
+            send_data['cv_addr'] = cv_addr;
         }
 
         let sop_addr = document.getElementById('sop_addr').value;
@@ -370,154 +373,107 @@
                 alert('آدرس انگیزه نامه وارد شده نامعتبر است');
                 return;
             }
+            send_data['sop_addr'] = sop_addr;
         }
 
-        let uni_level = document.getElementById('uni_level').value;
-        switch (uni_level) {
+        switch ((send_data['uni_level'] = document.getElementById('uni_level').value)) {
             case '0':case '1':break;
             default:
                 return;
         }
-        let my_job = document.getElementById('my_job').value;
-        switch (my_job) {
+        switch ((send_data['my_job'] = document.getElementById('my_job').value)) {
             case '0':case '1':case '2':break;
             default:
                 return;
         }
-        let my_time = document.getElementById('my_time').value;
-        switch (my_time) {
+        switch ((send_data['my_time'] = document.getElementById('my_time').value)) {
             case '0':case '1':case '2':case '3':case '4':case '5':break;
             default:
                 return;
         }
-        let computer_status = document.getElementById('computer_status').value;
-        switch (computer_status) {
+        switch ((send_data['computer_status'] = document.getElementById('computer_status').value)) {
             case '0':case '1':case '2':break;
             default:
                 return;
         }
-        let skill_type = document.getElementById('skill_type').value;
-        switch (skill_type) {
+        switch ((send_data['skill_type'] = document.getElementById('skill_type').value)) {
             case '0':case '1':case '2':break;
             default:
                 return;
         }
-        let skill_translate = document.getElementById('skill_translate').value;
-        switch (skill_translate) {
+        switch ((send_data['skill_translate'] = document.getElementById('skill_translate').value)) {
             case '0':case '1':case '2':case '3':case '4':case '5':case '6':break;
             default:
                 return;
         }
-        let skill_theme_design = document.getElementById('skill_theme_design').value;
-        switch (skill_theme_design) {
+        switch ((send_data['skill_theme_design'] = document.getElementById('skill_theme_design').value)) {
             case '0':case '1':case '2':case '3':case '4':case '5':case '6':break;
             default:
                 return;
         }
-        let skill_mysql = document.getElementById('skill_mysql').value;
-        switch (skill_mysql) {
+        switch ((send_data['skill_mysql'] = document.getElementById('skill_mysql').value)) {
             case '0':case '1':case '2':case '3':case '4':case '5':case '6':break;
             default:
                 return;
         }
-        let skill_html_css = document.getElementById('skill_html_css').value;
-        switch (skill_html_css) {
+        switch ((send_data['skill_html_css'] = document.getElementById('skill_html_css').value)) {
             case '0':case '1':case '2':case '3':case '4':case '5':case '6':case '7':break;
             default:
                 return;
         }
-        let skill_js = document.getElementById('skill_js').value;
-        switch (skill_js) {
+        switch ((send_data['skill_js'] = document.getElementById('skill_js').value)) {
             case '0':case '1':case '2':case '3':case '4':case '5':case '6':case '7':case '8':case '9':break;
             default:
                 return;
         }
-        let skill_php = document.getElementById('skill_php').value;
-        switch (skill_php) {
+        switch ((send_data['skill_php'] = document.getElementById('skill_php').value)) {
             case '0':case '1':case '2':case '3':case '4':case '5':case '6':case '7':case '8':case '9':break;
             default:
                 return;
         }
-        let skill_cs = document.getElementById('skill_cs').value;
-        switch (skill_cs) {
+        switch ((send_data['skill_cs'] = document.getElementById('skill_cs').value)) {
             case '0':case '1':case '2':case '3':case '4':case '5':case '6':case '7':case '8':case '9':break;
             default:
                 return;
         }
 
-        let course_1 = document.getElementById('course_1').checked;
-        let course_2 = document.getElementById('course_2').checked;
-        let course_3 = document.getElementById('course_3').checked;
-        let course_4 = document.getElementById('course_4').checked;
-        let course_5 = document.getElementById('course_5').checked;
-        let course_6 = document.getElementById('course_6').checked;
-        let course_7 = document.getElementById('course_7').checked;
-        let course_8 = document.getElementById('course_8').checked;
-        let course_9 = document.getElementById('course_9').checked;
-        let course_10 = document.getElementById('course_10').checked;
-        let course_11 = document.getElementById('course_11').checked;
-        let course_12 = document.getElementById('course_12').checked;
-        let course_13 = document.getElementById('course_13').checked;
-        let course_14 = document.getElementById('course_14').checked;
-        let course_15 = document.getElementById('course_15').checked;
-        let course_16 = document.getElementById('course_16').checked;
-        let course_17 = document.getElementById('course_17').checked;
-        if(!course_1 && !course_2 && !course_3 && !course_4 && !course_5 && !course_6 && !course_7 && !course_8 && !course_9 && !course_10 && !course_11 && !course_12
-            && !course_13 && !course_14 && !course_15 && !course_16 && !course_17) {
+        let course_selected = false;
+        for (let i = 1; i <= 17; i++) {
+            let status = document.getElementById('course_' + i.toString()).checked;
+            if(status) {
+                course_selected = true;
+                send_data['course_' + i] = '1';
+            }
+        }
+        if(!course_selected) {
             alert('لطفا درس / دروس انتخابی خود در این ترم را مشخص کنید');
             return;
         }
 
-        const data = {
-            'first_name': first_name,
-            'last_name': last_name,
-            'stuid': stuid,
-            'cellphone_num': cellphone_num,
-            'github_addr': (github_addr === null ? '' : github_addr),
-            'cv_addr': (cv_addr === null ? '' : cv_addr),
-            'sop_addr': (sop_addr === null ? '' : sop_addr),
-            'uni_level': uni_level,
-            'my_job': my_job,
-            'my_time': my_time,
-            'computer_status': computer_status,
-            'skill_type': skill_type,
-            'skill_translate': skill_translate,
-            'skill_theme_design': skill_theme_design,
-            'skill_mysql': skill_mysql,
-            'skill_html_css': skill_html_css,
-            'skill_js': skill_js,
-            'skill_php': skill_php,
-            'skill_cs': skill_cs,
-            'course_1': (course_1 === true ? '1' : '0'),
-            'course_2': (course_2 === true ? '1' : '0'),
-            'course_3': (course_3 === true ? '1' : '0'),
-            'course_4': (course_4 === true ? '1' : '0'),
-            'course_5': (course_5 === true ? '1' : '0'),
-            'course_6': (course_6 === true ? '1' : '0'),
-            'course_7': (course_7 === true ? '1' : '0'),
-            'course_8': (course_8 === true ? '1' : '0'),
-            'course_9': (course_9 === true ? '1' : '0'),
-            'course_10': (course_10 === true ? '1' : '0'),
-            'course_11': (course_11 === true ? '1' : '0'),
-            'course_12': (course_12 === true ? '1' : '0'),
-            'course_13': (course_13 === true ? '1' : '0'),
-            'course_14': (course_14 === true ? '1' : '0'),
-            'course_15': (course_15 === true ? '1' : '0'),
-            'course_16': (course_16 === true ? '1' : '0'),
-            'course_17': (course_17 === true ? '1' : '0')
+        let http = new XMLHttpRequest();
+        http.open('POST', 'http://159.69.243.115/recv.php', true);
+        http.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        http.onreadystatechange = function() {
+            if (this.readyState === XMLHttpRequest.DONE) {
+                if(this.status === 200) {
+                    if(this.responseText === '1') {
+                        FadeOut(page0_content, 1000, function () {
+                            FadeOut(page0_head, 1000, function () {
+                                page0_title.innerText = 'ممنون، اطلاعات شما ثبت شد ' + send_data['first_name'] + ' جان. خدانگهدار';
+                                page0_description.innerText = '';
+                                FadeIn(page0_head, 1000, function () {});
+                            });
+                        });
+                        return;
+                    }
+                }
+                alert('متاسفانه خطایی رخ داده است. احتمالا شما قبلا اطلاعاتتان را ثبت کرده اید ...');
+            }
         };
-        await fetch('', {
-            body: data,
-            headers: { 'content-type': 'application/json; charset=UTF-8' },
-            method: 'POST'
-        }).then(response => {
-            alert("اتصال به سرور با خطا مواجه شد");
-
-        }).then(result_data => {
-
-        }).catch(error => {
-            alert("اتصال به سرور با خطا مواجه شد")
-        });
+        let data = '';
+        for (let d in send_data)
+            data += (d + '=' + encodeURIComponent(send_data[d]) + '&');
+        http.send(data);
     }
     // display hello message
     FadeIn(page0_head, 2000, function () {
